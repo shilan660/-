@@ -1,0 +1,214 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0d0f13;color:#f5f7fb;font-family:system-ui,-apple-system,sans-serif}main{max-width:820px;margin:auto;padding:18px}.card{background:#171a21;border:1px solid #2a2f3a;border-radius:22px;padding:18px;margin:12px 0}.headline{display:grid;grid-template-columns:1fr 1fr;gap:12px}.metric{background:#11141a;border:1px solid #2a2f3a;border-radius:18px;padding:16px;min-width:0}.metric .k{color:#9aa4b2;font-size:14px}.metric .v{font-size:56px;font-weight:850;letter-spacing:-2px;line-height:1.05;margin:10px 0 3px;white-space:nowrap}.metric .u{color:#9aa4b2;font-size:14px}.metric.daily{border-color:#40547c}.muted{color:#9aa4b2;font-size:14px;line-height:1.6}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.stat{background:#11141a;border:1px solid #2a2f3a;border-radius:14px;padding:14px;min-width:0}.stat b{display:block;font-size:22px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}input{width:100%;background:#10131a;color:#fff;border:1px solid #303744;border-radius:12px;padding:13px;font-size:16px;margin-top:7px}button{min-height:48px;border:0;border-radius:12px;font-size:16px;font-weight:750;padding:0 15px}.row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}.row button{flex:1;min-width:120px}.primary{background:#7aa2ff;color:#07101f}.secondary{background:#282e3a;color:#fff}.danger{background:#492328;color:#ffd9dd}.status{margin-top:12px;background:#10131a;border-radius:10px;padding:11px;color:#9aa4b2;font-size:14px;line-height:1.55}.ok{color:#53d18b}.err{color:#ff8585}label{display:block;color:#aab3c0;font-size:14px;margin-top:5px}.note{margin-top:10px;border-left:3px solid #40547c;padding-left:10px}@media(max-width:620px){.headline{grid-template-columns:1fr}.metric .v{font-size:50px}.stats{grid-template-columns:1fr 1fr}}@media(max-width:380px){.metric .v{font-size:44px}}
+
+/* Added tool selector and converter; existing speed-meter styles are kept intact. */
+.home-shell,.calc-shell{max-width:820px;margin:0 auto;padding:24px 18px 36px}
+.home-hero{padding:20px 4px 24px}.home-title{font-size:30px;font-weight:850;letter-spacing:-.7px}.home-subtitle{color:#9aa4b2;margin-top:8px;line-height:1.6}
+.feature-card{width:100%;display:flex;align-items:center;gap:14px;text-align:left;background:#171a21;color:#f5f7fb;border:1px solid #2a2f3a;border-radius:20px;padding:18px;margin:12px 0;min-height:92px;cursor:pointer}
+.feature-icon{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;background:#252c3a;font-size:25px;flex-shrink:0}
+.feature-copy{flex:1}.feature-copy strong{display:block;font-size:18px}.feature-copy small{display:block;color:#9aa4b2;font-size:13px;margin-top:5px;font-weight:400}.feature-arrow{font-size:25px;color:#9aa4b2}
+.tool-nav{max-width:820px;margin:0 auto;padding:10px 18px 0}.tool-nav button{background:#282e3a;color:#fff;min-height:40px;padding:0 14px;border-radius:11px}
+.calc-shell{padding-top:8px}.tool-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.tool-tab{background:#202631;color:#aeb8c8;border:1px solid #303744}.tool-tab.active{background:#7aa2ff;color:#07101f}
+.calc-input{font-size:30px!important;font-weight:750;text-align:right;min-height:64px;margin:0 0 12px!important}
+.calc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.calc-grid button{min-width:0;padding:0;min-height:54px;background:#242a35;color:#f5f7fb;border:1px solid #333b49;font-size:20px}.calc-grid button.op{background:#303e58;color:#c5d7ff}.calc-grid button.eq{background:#7aa2ff;color:#07101f}.calc-grid button.clear{background:#492328;color:#ffd9dd}
+.convert-field{margin:12px 0}.convert-field input,.convert-field select,.angle-grid input,.angle-grid select{width:100%;background:#10131a;color:#fff;border:1px solid #303744;border-radius:12px;padding:13px;font-size:16px;margin-top:7px;min-height:48px}
+.convert-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:end}.convert-row button{background:#282e3a;color:#fff;min-width:48px;padding:0 12px}
+.convert-result{font-size:25px;font-weight:800;overflow-wrap:anywhere;background:#10131a;border:1px solid #303744;border-radius:14px;padding:16px;margin-top:12px;color:#9fc0ff}
+.angle-box{margin-top:16px;padding-top:16px;border-top:1px solid #303744}.angle-box h3{font-size:17px;margin:0 0 8px}.angle-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.angle-grid .sign-cell{grid-column:span 3}.angle-output{background:#10131a;border-radius:12px;padding:12px;margin-top:10px;overflow-wrap:anywhere;color:#c5d7ff}
+.small-help{color:#9aa4b2;font-size:13px;line-height:1.55;margin-top:8px}
+@media(max-width:480px){.home-title{font-size:26px}.feature-card{padding:14px}.convert-row{grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr)}.angle-grid{gap:6px}.angle-grid input,.angle-grid select{padding:10px;font-size:15px}}
+
+/* Food check-in feature; existing speed-meter rules remain unchanged. */
+.food-shell{max-width:820px;margin:0 auto;padding:8px 18px 36px}
+.food-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.food-stat{background:#11141a;border:1px solid #2a2f3a;border-radius:16px;padding:14px;min-width:0}
+.food-stat span{display:block;color:#9aa4b2;font-size:13px}
+.food-stat strong{display:block;font-size:23px;margin-top:7px;overflow-wrap:anywhere}
+.food-shell h2{font-size:18px;margin:0 0 12px}
+.food-shell input,.food-shell select{width:100%;background:#10131a;color:#fff;border:1px solid #303744;border-radius:12px;padding:13px;font-size:16px;margin-top:7px;min-height:48px}
+.food-form-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.food-chips{display:flex;flex-wrap:wrap;gap:8px}
+.food-chip{min-height:42px;background:#252c3a;color:#e5ecf7;border:1px solid #374254;border-radius:999px;padding:0 14px;font-size:14px}
+.food-list-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.food-list-header h2{margin:0}
+.food-list-header select{width:auto;min-width:115px;margin:0}
+.food-summary-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #2a2f3a}
+.food-summary-row:last-child{border-bottom:0}
+.food-summary-row strong{color:#a9c5ff;white-space:nowrap}
+.food-record{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #2a2f3a}
+.food-record:last-child{border-bottom:0}
+.food-record-main{flex:1;min-width:0}
+.food-record-name{font-weight:750;font-size:16px;overflow-wrap:anywhere}
+.food-record-meta{color:#9aa4b2;font-size:12px;margin-top:5px;line-height:1.5;overflow-wrap:anywhere}
+.food-record-count{font-weight:800;color:#a9c5ff;white-space:nowrap;margin-top:2px}
+.food-delete{min-height:34px;padding:0 10px;font-size:13px;background:#492328;color:#ffd9dd;flex-shrink:0}
+.food-empty{color:#9aa4b2;font-size:14px;line-height:1.6;padding:10px 0}
+@media(max-width:480px){.food-shell{padding-left:14px;padding-right:14px}.food-stats{gap:7px}.food-stat{padding:10px}.food-stat strong{font-size:19px}.food-form-row{gap:8px}}
+
+</style></head><body><div id="homePage" class="page" style="display:block">
+<div class="home-shell">
+  <div class="home-hero"><div class="home-title">墨墨工具箱</div><div class="home-subtitle">背词计速、计算换算与饮食记录</div></div>
+  <button type="button" class="feature-card" onclick="showPage('speedPage')"><span class="feature-icon">书</span><span class="feature-copy"><strong>背词速度计</strong><small>本轮平均、今日平均与学习时长</small></span><span class="feature-arrow">›</span></button>
+  <button type="button" class="feature-card" onclick="showPage('calcPage')"><span class="feature-icon">＋</span><span class="feature-copy"><strong>计算器与单位换算</strong><small>基础四则运算、角度数字互转及常见单位</small></span><span class="feature-arrow">›</span></button>
+  <button type="button" class="feature-card" onclick="showPage('foodPage')"><span class="feature-icon">食</span><span class="feature-copy"><strong>饮食打卡</strong><small>记录吃了什么，自动统计每种食物吃了几顿</small></span><span class="feature-arrow">›</span></button>
+  <div class="small-help">记录保存在本机。背词速度计原有的计速逻辑与数据请求保持不变。</div>
+</div>
+</div>
+<div id="speedPage" class="page" style="display:none">
+<div class="tool-nav"><button type="button" onclick="showPage('homePage')">← 功能首页</button></div>
+<main><div class="muted">&#32972;&#35789;&#36895;&#24230;&#35745; &middot; &#22696;&#22696;&#23398;&#20064;&#25968;&#25454;&#33258;&#21160;&#21047;&#26032;</div><section class="card"><div class="headline"><div class="metric"><div class="k">&#26412;&#36718;&#24179;&#22343;</div><div id="sessionSpeed" class="v">0.00</div><div class="u">&#35789; / &#20998;&#38047;</div></div><div class="metric daily"><div class="k">&#20170;&#26085;&#24179;&#22343;</div><div id="daySpeed" class="v">0.00</div><div class="u">&#35789; / &#20998;&#38047;</div></div></div><div class="stats"><div class="stat"><span class="muted">&#26412;&#36718;&#26032;&#22686;</span><b id="sessionDelta">0</b></div><div class="stat"><span class="muted">&#26412;&#36718;&#29992;&#26102;</span><b id="sessionTime">00:00</b></div><div class="stat"><span class="muted">&#20170;&#26085;&#24050;&#32972;</span><b id="dayFinished">--</b></div><div class="stat"><span class="muted">&#20170;&#26085;&#23398;&#20064;&#26102;&#38271;</span><b id="dayTime">--</b></div></div><div class="muted note">&#20170;&#26085;&#24179;&#22343; = &#20170;&#26085;&#24050;&#23436;&#25104;&#35789;&#25968; &divide; &#22696;&#22696;&#35760;&#24405;&#30340;&#20170;&#26085;&#23398;&#20064;&#26102;&#38271;&#12290;&#19981;&#26159;&#20174;&#20940;&#28857;&#24320;&#22987;&#35745;&#26102;&#12290;</div></section><section class="card"><label>MaiMemo API Token</label><input id="token" type="password" autocomplete="off" placeholder="&#31896;&#36148; Token&#65292;&#19981;&#35201;&#24102; Bearer"><div class="row"><button id="test" class="secondary">&#27979;&#35797;&#36830;&#25509;</button><button id="start" class="primary">&#24320;&#22987;&#35745;&#36895;</button><button id="stop" class="danger">&#20572;&#27490;</button></div><div id="status" class="status">&#23578;&#26410;&#36830;&#25509;&#12290;</div><div class="muted" style="margin-top:10px">Token &#21482;&#20445;&#23384;&#22312;&#26412;&#26426;&#12290;&#24314;&#35758;&#22312;&#22696;&#22696;&#20013;&#24320;&#21551;&#23398;&#20064;&#25968;&#25454;&#33258;&#21160;&#21516;&#27493;&#12290;&#24320;&#22987;&#21518;&#27599; 10 &#31186;&#21047;&#26032;&#19968;&#27425;&#12290;</div></section></main></div><div id="calcPage" class="page" style="display:none">
+<div class="tool-nav"><button type="button" onclick="showPage('homePage')">← 功能首页</button></div>
+<div class="calc-shell">
+  <div class="tool-tabs"><button id="tabCalculator" class="tool-tab active" type="button">计算器</button><button id="tabConverter" class="tool-tab" type="button">单位换算</button></div>
+  <section id="calculatorPanel" class="card">
+    <input id="calcInput" class="calc-input" value="0" readonly aria-label="计算表达式">
+    <div class="calc-grid">
+      <button class="clear" data-key="AC">AC</button><button data-key="DEL">⌫</button><button class="op" data-key="%">%</button><button class="op" data-key="÷">÷</button>
+      <button data-key="7">7</button><button data-key="8">8</button><button data-key="9">9</button><button class="op" data-key="×">×</button>
+      <button data-key="4">4</button><button data-key="5">5</button><button data-key="6">6</button><button class="op" data-key="−">−</button>
+      <button data-key="1">1</button><button data-key="2">2</button><button data-key="3">3</button><button class="op" data-key="+">+</button>
+      <button data-key="(">(</button><button data-key="0">0</button><button data-key=".">.</button><button data-key=")">)</button>
+      <button data-key="SIGN">±</button><button class="clear" data-key="AC">清空</button><button class="eq" data-key="=" style="grid-column:span 2">=</button>
+    </div>
+    <div id="calcStatus" class="small-help">支持加、减、乘、除、括号和百分比。</div>
+  </section>
+  <section id="converterPanel" class="card" style="display:none">
+    <div class="convert-field"><label for="unitCategory">换算类别</label><select id="unitCategory"></select></div>
+    <div class="convert-field"><label for="unitValue">输入数值</label><input id="unitValue" type="number" inputmode="decimal" value="1" step="any"></div>
+    <div class="convert-row">
+      <div class="convert-field"><label for="unitFrom">从</label><select id="unitFrom"></select></div>
+      <button type="button" id="swapUnits" aria-label="交换单位">⇄</button>
+      <div class="convert-field"><label for="unitTo">换算为</label><select id="unitTo"></select></div>
+    </div>
+    <div class="muted">换算结果</div><div id="unitResult" class="convert-result">1</div>
+    <div class="small-help">支持角度、长度、质量、面积、体积、温度、时间、速度、数据存储、压力、能量和功率。</div>
+    <div class="angle-box">
+      <h3>角度数字互转：十进制度 ↔ 度分秒</h3>
+      <div class="convert-field"><label for="decimalDeg">十进制度（°）</label><input id="decimalDeg" type="number" inputmode="decimal" step="any" value="12.504167"></div>
+      <button id="toDms" class="primary" type="button">十进制度 → 度分秒</button>
+      <div id="dmsOutput" class="angle-output">12° 30′ 15.00″</div>
+      <div class="angle-grid">
+        <div class="sign-cell"><label for="dmsSign">角度正负</label><select id="dmsSign"><option value="1">正角度（+）</option><option value="-1">负角度（−）</option></select></div>
+        <div><label for="dmsD">度</label><input id="dmsD" type="number" inputmode="decimal" min="0" value="12"></div>
+        <div><label for="dmsM">分（0–59）</label><input id="dmsM" type="number" inputmode="decimal" min="0" max="59" value="30"></div>
+        <div><label for="dmsS">秒（0–59.999）</label><input id="dmsS" type="number" inputmode="decimal" min="0" max="59.999999" step="any" value="15"></div>
+      </div>
+      <button id="fromDms" class="primary" type="button" style="margin-top:12px;width:100%">度分秒 → 十进制度</button>
+      <div id="dmsDecimalOutput" class="angle-output">12.5041666667°</div>
+      <div class="small-help">例如 12° 30′ 15″ = 12.5041667°。角度单位换算也可在上方“角度”类别中进行。</div>
+    </div>
+  </section>
+</div>
+</div>
+<div id="foodPage" class="page" style="display:none">
+<div class="tool-nav"><button type="button" onclick="showPage('homePage')">← 功能首页</button></div>
+<div class="food-shell">
+  <div class="home-hero"><div class="home-title">饮食打卡</div><div class="home-subtitle">简单记下吃了什么、吃了几顿。不记录卡路里，也不做复杂分析。</div></div>
+  <div class="food-stats">
+    <div class="food-stat"><span>今天吃了</span><strong id="foodTodayTotal">0 顿</strong></div>
+    <div class="food-stat"><span>今日食物种类</span><strong id="foodTodayKinds">0 种</strong></div>
+    <div class="food-stat"><span>累计记录</span><strong id="foodAllTotal">0 顿</strong></div>
+  </div>
+  <section class="card">
+    <h2>记一顿</h2>
+    <label for="foodName">吃了什么</label><input id="foodName" type="text" maxlength="80" placeholder="例如：猪脚饭、牛肉面" autocomplete="off">
+    <div class="food-form-row">
+      <div><label for="foodCount">顿数</label><input id="foodCount" type="number" min="1" max="999" step="1" value="1" inputmode="numeric"></div>
+      <div><label for="foodDate">日期</label><input id="foodDate" type="date"></div>
+    </div>
+    <label for="foodNote">备注（可选）</label><input id="foodNote" type="text" maxlength="120" placeholder="例如：加蛋、外卖、和朋友一起吃">
+    <div class="row"><button id="saveFoodRecord" class="primary" type="button">保存记录</button><button id="clearFoodForm" class="secondary" type="button">清空</button></div>
+    <div id="foodStatus" class="status">记录只保存在这台设备上。</div>
+  </section>
+  <section class="card">
+    <h2>常吃的食物</h2>
+    <div id="foodQuickList" class="food-chips"></div>
+    <div class="small-help">点一下快捷按钮，会直接记录今天吃了 1 顿。记录过的食物会自动出现在这里。</div>
+  </section>
+  <section class="card">
+    <div class="food-list-header"><h2>食物统计</h2><select id="foodFilter" aria-label="统计时间范围"><option value="today">今天</option><option value="week">近 7 天</option><option value="all">全部时间</option></select></div>
+    <div id="foodSummary"></div>
+  </section>
+  <section class="card">
+    <h2>打卡明细</h2>
+    <div id="foodRecords"></div>
+  </section>
+</div>
+</div>
+<script>
+(function(){
+  window.showPage=function(id){['homePage','speedPage','calcPage','foodPage'].forEach(function(x){var e=document.getElementById(x);if(e)e.style.display=x===id?'block':'none';});window.scrollTo(0,0);};
+  var calcInput=document.getElementById('calcInput'),calcStatus=document.getElementById('calcStatus');
+  function evaluate(expr){
+    var s=String(expr).replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/\s+/g,'');
+    var i=0;
+    function peek(){return s[i]||'';}
+    function eat(c){if(peek()===c){i++;return true;}return false;}
+    function number(){var start=i,dot=false;while(i<s.length){var c=s[i];if(c>='0'&&c<='9'){i++;continue;}if(c==='.'&&!dot){dot=true;i++;continue;}break;}if(start===i)throw Error('数字格式不正确');var n=Number(s.slice(start,i));if(!Number.isFinite(n))throw Error('数字无效');return n;}
+    function primary(){if(eat('(')){var v=add();if(!eat(')'))throw Error('缺少右括号');return v;}return number();}
+    function unary(){if(eat('+'))return unary();if(eat('-'))return -unary();var v=primary();while(eat('%'))v/=100;return v;}
+    function mul(){var v=unary();while(true){if(eat('*'))v*=unary();else if(eat('/')){var r=unary();if(r===0)throw Error('不能除以 0');v/=r;}else break;}return v;}
+    function add(){var v=mul();while(true){if(eat('+'))v+=mul();else if(eat('-'))v-=mul();else break;}return v;}
+    if(!s)throw Error('请输入算式');var result=add();if(i!==s.length)throw Error('算式格式不正确');if(!Number.isFinite(result))throw Error('结果超出范围');return result;
+  }
+  function fmt(n){if(!Number.isFinite(n))return '—';if(Math.abs(n)<1e-12)n=0;return Number(n.toPrecision(12)).toString();}
+  document.querySelectorAll('.calc-grid button').forEach(function(b){b.addEventListener('click',function(){var k=b.getAttribute('data-key'),s=calcInput.value;if(k==='AC'){calcInput.value='0';calcStatus.textContent='已清空。';return;}if(k==='DEL'){calcInput.value=s.length>1?s.slice(0,-1):'0';return;}if(k==='='){try{calcInput.value=fmt(evaluate(s));calcStatus.textContent='计算完成。';}catch(e){calcStatus.textContent=e.message||'算式错误';}return;}if(k==='SIGN'){if(s==='0')return;calcInput.value=s.startsWith('-')?s.slice(1):'-('+s+')';return;}calcInput.value=s==='0'&&!'+−-×÷%.)'.includes(k)?k:s+k;calcStatus.textContent='';});});
+  var categories={
+    angle:{label:'角度',units:[['十进制度（°）',1],['弧度（rad）',180/Math.PI],['百分度（grad）',0.9],['角分（′）',1/60],['角秒（″）',1/3600]]},
+    length:{label:'长度',units:[['米（m）',1],['千米（km）',1000],['厘米（cm）',0.01],['毫米（mm）',0.001],['微米（μm）',0.000001],['英寸（in）',0.0254],['英尺（ft）',0.3048],['英里（mi）',1609.344]]},
+    mass:{label:'质量',units:[['千克（kg）',1000],['克（g）',1],['毫克（mg）',0.001],['吨（t）',1000000],['磅（lb）',453.59237],['盎司（oz）',28.349523125]]},
+    area:{label:'面积',units:[['平方米（m²）',1],['平方千米（km²）',1000000],['平方厘米（cm²）',0.0001],['公顷（ha）',10000],['英亩（acre）',4046.8564224],['平方英尺（ft²）',0.09290304]]},
+    volume:{label:'体积',units:[['升（L）',1],['毫升（mL）',0.001],['立方米（m³）',1000],['立方厘米（cm³）',0.001],['美制加仑（US gal）',3.785411784],['杯（US cup）',0.2365882365]]},
+    temperature:{label:'温度',units:[['摄氏度（°C）',1],['华氏度（°F）',1],['开尔文（K）',1]]},
+    time:{label:'时间',units:[['秒（s）',1],['毫秒（ms）',0.001],['分钟（min）',60],['小时（h）',3600],['天（d）',86400],['周（week）',604800]]},
+    speed:{label:'速度',units:[['米/秒（m/s）',1],['千米/小时（km/h）',1000/3600],['英里/小时（mph）',0.44704],['节（kn）',0.5144444444]]},
+    data:{label:'数据存储',units:[['字节（B）',1],['KB（1000 B）',1000],['MB（1000 KB）',1000000],['GB（1000 MB）',1000000000],['KiB（1024 B）',1024],['MiB（1024 KiB）',1048576],['GiB（1024 MiB）',1073741824]]},
+    pressure:{label:'压力',units:[['帕（Pa）',1],['千帕（kPa）',1000],['兆帕（MPa）',1000000],['巴（bar）',100000],['标准大气压（atm）',101325],['磅/平方英寸（psi）',6894.757293]]},
+    energy:{label:'能量',units:[['焦耳（J）',1],['千焦（kJ）',1000],['卡（cal）',4.184],['千卡（kcal）',4184],['瓦时（Wh）',3600],['千瓦时（kWh）',3600000],['电子伏（eV）',1.602176634e-19]]},
+    power:{label:'功率',units:[['瓦（W）',1],['千瓦（kW）',1000],['兆瓦（MW）',1000000],['公制马力（PS）',735.49875],['英制马力（hp）',745.699872]]}
+  };
+  var cat=document.getElementById('unitCategory'),from=document.getElementById('unitFrom'),to=document.getElementById('unitTo'),value=document.getElementById('unitValue'),result=document.getElementById('unitResult');
+  Object.keys(categories).forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=categories[k].label;cat.appendChild(o);});
+  function fillUnits(){var u=categories[cat.value].units;[from,to].forEach(function(sel){sel.innerHTML='';u.forEach(function(x){var o=document.createElement('option');o.value=x[0];o.textContent=x[0];sel.appendChild(o);});});if(u.length>1)to.selectedIndex=1;convert();}
+  function tempToC(v,u){if(u.indexOf('华氏')===0)return (v-32)*5/9;if(u.indexOf('开尔文')===0)return v-273.15;return v;}
+  function cToTemp(v,u){if(u.indexOf('华氏')===0)return v*9/5+32;if(u.indexOf('开尔文')===0)return v+273.15;return v;}
+  function convert(){var n=Number(value.value);if(value.value.trim()===''||!Number.isFinite(n)){result.textContent='请输入有效数值';return;}var us=categories[cat.value].units,a=us.find(function(x){return x[0]===from.value;}),b=us.find(function(x){return x[0]===to.value;});if(!a||!b)return;var v=cat.value==='temperature'?cToTemp(tempToC(n,a[0]),b[0]):n*a[1]/b[1];result.textContent=fmt(v)+' '+b[0];}
+  cat.addEventListener('change',fillUnits);from.addEventListener('change',convert);to.addEventListener('change',convert);value.addEventListener('input',convert);document.getElementById('swapUnits').addEventListener('click',function(){var x=from.value;from.value=to.value;to.value=x;convert();});fillUnits();
+  var dec=document.getElementById('decimalDeg'),dmsOut=document.getElementById('dmsOutput'),dmsD=document.getElementById('dmsD'),dmsM=document.getElementById('dmsM'),dmsS=document.getElementById('dmsS'),dmsSign=document.getElementById('dmsSign'),dmsDecOut=document.getElementById('dmsDecimalOutput');
+  function toDMS(){var v=Number(dec.value);if(dec.value.trim()===''||!Number.isFinite(v)){dmsOut.textContent='请输入有效角度';return;}var sign=v<0?'−':'',a=Math.abs(v),d=Math.floor(a),mfull=(a-d)*60,m=Math.floor(mfull),s=(mfull-m)*60;if(s>=59.9999995){s=0;m++;}if(m>=60){m=0;d++;}dmsOut.textContent=sign+d+'° '+m+'′ '+s.toFixed(2)+'″';dmsD.value=d;dmsM.value=m;dmsS.value=s.toFixed(2);dmsSign.value=v<0?'-1':'1';dmsDecOut.textContent=fmt(v)+'°';}
+  function fromDMS(){var d=Number(dmsD.value),m=Number(dmsM.value),s=Number(dmsS.value);if([d,m,s].some(function(x){return !Number.isFinite(x)||x<0;})||m>=60||s>=60){dmsDecOut.textContent='请检查输入：度应为非负数，分和秒需在 0–59 之间。';return;}var v=Number(dmsSign.value)*(d+m/60+s/3600);dec.value=fmt(v);dmsDecOut.textContent=fmt(v)+'°';}
+  document.getElementById('toDms').addEventListener('click',toDMS);document.getElementById('fromDms').addEventListener('click',fromDMS);toDMS();
+  document.getElementById('tabCalculator').addEventListener('click',function(){document.getElementById('calculatorPanel').style.display='block';document.getElementById('converterPanel').style.display='none';this.classList.add('active');document.getElementById('tabConverter').classList.remove('active');});
+  document.getElementById('tabConverter').addEventListener('click',function(){document.getElementById('calculatorPanel').style.display='none';document.getElementById('converterPanel').style.display='block';this.classList.add('active');document.getElementById('tabCalculator').classList.remove('active');});
+})();
+</script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var storageKey='mm_food_records_v1';
+  var records=[];
+  try{var saved=localStorage.getItem(storageKey);if(saved){var parsed=JSON.parse(saved);if(Array.isArray(parsed))records=parsed.filter(function(r){return r&&typeof r.name==='string'&&typeof r.date==='string'&&Number.isFinite(Number(r.count))&&Number(r.count)>0;}).map(function(r){return{id:String(r.id||Date.now()+Math.random()),name:r.name.trim(),count:Math.max(1,Math.floor(Number(r.count))),date:r.date,note:String(r.note||''),createdAt:Number(r.createdAt)||0};});}}catch(e){records=[];}
+  function dateString(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function today(){return dateString(new Date());}
+  function save(){try{localStorage.setItem(storageKey,JSON.stringify(records));}catch(e){setStatus('保存失败：设备存储空间可能不足。','err');}}
+  function setStatus(text,kind){var el=$('foodStatus');el.textContent=text;el.className='status'+(kind?' '+kind:'');}
+  function sum(items){return items.reduce(function(n,r){return n+r.count;},0);}
+  function selectedRecords(){var mode=$('foodFilter').value,t=today();if(mode==='today')return records.filter(function(r){return r.date===t;});if(mode==='week'){var d=new Date();d.setDate(d.getDate()-6);var start=dateString(d);return records.filter(function(r){return r.date>=start&&r.date<=t;});}return records.slice();}
+  function el(tag,cls,text){var n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
+  function renderStats(){var todays=records.filter(function(r){return r.date===today();});$('foodTodayTotal').textContent=sum(todays)+' 顿';$('foodTodayKinds').textContent=(new Set(todays.map(function(r){return r.name;}))).size+' 种';$('foodAllTotal').textContent=sum(records)+' 顿';}
+  function renderQuick(){var box=$('foodQuickList');box.replaceChildren();var totals={};records.forEach(function(r){totals[r.name]=(totals[r.name]||0)+r.count;});var names=Object.keys(totals).sort(function(a,b){return totals[b]-totals[a]||a.localeCompare(b,'zh-CN');}).slice(0,8);if(!names.length)names=['猪脚饭','牛肉面','麻辣烫'];names.forEach(function(name){var b=el('button','food-chip',name+'  +1');b.type='button';b.addEventListener('click',function(){addRecord(name,1,today(),'');setStatus('已记录：'+name+' × 1 顿。','ok');});box.appendChild(b);});}
+  function renderSummary(){var box=$('foodSummary');box.replaceChildren();var list=selectedRecords(),totals={};list.forEach(function(r){totals[r.name]=(totals[r.name]||0)+r.count;});var names=Object.keys(totals).sort(function(a,b){return totals[b]-totals[a]||a.localeCompare(b,'zh-CN');});if(!names.length){box.appendChild(el('div','food-empty','这个时间范围还没有记录。先记下第一顿吧。'));return;}names.forEach(function(name){var row=el('div','food-summary-row'),label=el('span','',name),count=el('strong','',totals[name]+' 顿');row.appendChild(label);row.appendChild(count);box.appendChild(row);});}
+  function renderRecords(){var box=$('foodRecords');box.replaceChildren();var list=selectedRecords().sort(function(a,b){return b.date.localeCompare(a.date)||b.createdAt-a.createdAt;});if(!list.length){box.appendChild(el('div','food-empty','这里还没有打卡明细。'));return;}list.forEach(function(r){var row=el('div','food-record'),main=el('div','food-record-main'),name=el('div','food-record-name',r.name),meta=el('div','food-record-meta',r.date+(r.note?' · '+r.note:'')),count=el('div','food-record-count',r.count+' 顿'),del=el('button','food-delete','删除');main.appendChild(name);main.appendChild(meta);del.type='button';del.addEventListener('click',function(){records=records.filter(function(x){return x.id!==r.id;});save();render();setStatus('已删除这条记录。','ok');});row.appendChild(main);row.appendChild(count);row.appendChild(del);box.appendChild(row);});}
+  function render(){renderStats();renderQuick();renderSummary();renderRecords();}
+  function addRecord(name,count,date,note){records.push({id:Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9),name:name,count:count,date:date,note:note,createdAt:Date.now()});save();render();}
+  $('foodDate').value=today();
+  $('saveFoodRecord').addEventListener('click',function(){var name=$('foodName').value.trim(),count=Number($('foodCount').value),date=$('foodDate').value,note=$('foodNote').value.trim();if(!name){setStatus('请先填写食物名称，例如“猪脚饭”。','err');$('foodName').focus();return;}if(!Number.isInteger(count)||count<1||count>999){setStatus('顿数请填写 1 到 999 之间的整数。','err');return;}if(!date){setStatus('请选择日期。','err');return;}addRecord(name,count,date,note);$('foodName').value='';$('foodCount').value='1';$('foodNote').value='';setStatus('记录成功：'+name+' × '+count+' 顿。','ok');});
+  $('clearFoodForm').addEventListener('click',function(){$('foodName').value='';$('foodCount').value='1';$('foodDate').value=today();$('foodNote').value='';setStatus('已清空输入内容。','');});
+  $('foodFilter').addEventListener('change',function(){renderSummary();renderRecords();});
+  $('foodName').addEventListener('keydown',function(e){if(e.key==='Enter')$('saveFoodRecord').click();});
+  render();
+})();
+</script>
+<script>
+(()=>{const $=id=>document.getElementById(id),tok=$('token'),ss=$('sessionSpeed'),ds=$('daySpeed'),sd=$('sessionDelta'),stme=$('sessionTime'),df=$('dayFinished'),dt=$('dayTime'),msgbox=$('status');let baseFinished=null,current=null,t0=null,poll=null,clock=null;tok.value=localStorage.getItem('mm_tok')||'';function msg(s,c=''){msgbox.textContent=s;msgbox.className='status '+c}function fmtShort(ms){let s=Math.max(0,Math.floor(ms/1000)),m=Math.floor(s/60),h=Math.floor(m/60);m=m%60;if(h>0)return h+':'+String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0');return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}function fmtDay(ms){if(!Number.isFinite(ms)||ms<0)return '--';let totalSec=Math.floor(ms/1000),h=Math.floor(totalSec/3600),m=Math.floor((totalSec%3600)/60),s=totalSec%60;if(h>0)return h+'h '+m+'m';if(m>0)return m+'m '+s+'s';return s+'s'}function parseProgress(j){let q=[j],seen=new Set(),found=null;for(let depth=0;depth<5&&q.length;depth++){let nq=[];for(const x of q){if(!x||typeof x!=='object'||seen.has(x))continue;seen.add(x);let f=Number(x.finished),tm=Number(x.study_time);if(Number.isFinite(f)&&Number.isFinite(tm)){found=x;break}for(const k of ['data','progress','result'])if(x[k]&&typeof x[k]==='object')nq.push(x[k])}if(found)break;q=nq}if(!found)throw new Error('Cannot find finished/study_time in API response');let f=Number(found.finished),t=Number(found.total),tm=Number(found.study_time);return{finished:f,total:Number.isFinite(t)?t:null,studyTime:tm}}async function requestProgress(path){let t=tok.value.trim();let r=await fetch(path,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json','Authorization':'Bearer '+t},body:'{}',cache:'no-store'}),tx=await r.text(),j;try{j=JSON.parse(tx)}catch(e){throw new Error('HTTP '+r.status+' returned non-JSON')}if(!r.ok){let e=new Error('HTTP '+r.status);e.status=r.status;throw e}if(j&&j.success===false)throw new Error('API request unsuccessful');if(j&&Array.isArray(j.errors)&&j.errors.length)throw new Error('API returned an error');return parseProgress(j)}async function getProgress(){let t=tok.value.trim();if(!t)throw new Error('Please enter Token');localStorage.setItem('mm_tok',t);try{return await requestProgress('/open/api/v1/study/get_study_progress')}catch(e){if(e&&e.status&&![404,405].includes(e.status))throw e;return await requestProgress('/open/api/v1/memo/study/get_study_progress')}}function draw(){if(current){df.textContent=String(current.finished);dt.textContent=fmtDay(current.studyTime);let mins=current.studyTime/60000;ds.textContent=mins>0?(current.finished/mins).toFixed(2):'0.00'}if(t0&&baseFinished!=null){let ms=Date.now()-t0,d=Math.max(0,(current?current.finished:baseFinished)-baseFinished);sd.textContent=String(d);stme.textContent=fmtShort(ms);ss.textContent=ms>0?(d/(ms/60000)).toFixed(2):'0.00'}}async function update(){try{current=await getProgress();draw();msg('\u5df2\u8fde\u63a5 \u00b7 \u6b63\u5728\u81ea\u52a8\u5237\u65b0\u3002\u4eca\u65e5 '+current.finished+' \u8bcd\uff0c\u5b66\u4e60 '+fmtDay(current.studyTime)+'\u3002','ok')}catch(e){msg((e.message||String(e))+'\u3002\u8bf7\u68c0\u67e5 Token\u3001\u7f51\u7edc\u548c\u58a8\u58a8\u5b66\u4e60\u6570\u636e\u81ea\u52a8\u540c\u6b65\u3002','err')}}$('test').addEventListener('click',async()=>{try{msg('\u6b63\u5728\u6d4b\u8bd5...');current=await getProgress();draw();let mins=current.studyTime/60000,avg=mins>0?(current.finished/mins).toFixed(2):'0.00';msg('\u8fde\u63a5\u6210\u529f\u3002\u4eca\u65e5 '+current.finished+' \u8bcd / '+fmtDay(current.studyTime)+'\uff0c\u5e73\u5747 '+avg+' \u8bcd/\u5206\u949f\u3002','ok')}catch(e){msg((e.message||String(e))+'\u3002','err')}});$('start').addEventListener('click',async()=>{if(poll)clearInterval(poll);if(clock)clearInterval(clock);try{msg('\u6b63\u5728\u8bfb\u53d6\u8d77\u59cb\u8fdb\u5ea6...');current=await getProgress();baseFinished=current.finished;t0=Date.now();draw();msg('\u5df2\u5f00\u59cb\u3002\u672c\u8f6e\u8d77\u59cb '+baseFinished+' \u8bcd\uff1b\u4eca\u65e5\u901f\u5ea6\u540c\u6b65\u663e\u793a\u3002','ok');poll=setInterval(update,10000);clock=setInterval(draw,1000)}catch(e){msg((e.message||String(e))+'\u3002','err')}});$('stop').addEventListener('click',()=>{if(poll)clearInterval(poll);if(clock)clearInterval(clock);poll=clock=null;msg('\u5df2\u505c\u6b62\u81ea\u52a8\u5237\u65b0\uff0c\u5f53\u524d\u6570\u636e\u4fdd\u7559\u3002')});})();
+</script></body></html> 

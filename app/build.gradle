@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.application'
+}
+
+def keystorePath = System.getenv('ANDROID_KEYSTORE_PATH')
+def keystorePassword = System.getenv('ANDROID_KEYSTORE_PASSWORD')
+def keyAliasValue = System.getenv('ANDROID_KEY_ALIAS')
+def keyPasswordValue = System.getenv('ANDROID_KEY_PASSWORD')
+def hasReleaseSigning = keystorePath && keystorePassword && keyAliasValue && keyPasswordValue
+
+android {
+    namespace 'com.openai.wordmeter.v5'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.openai.wordmeter.v5'
+        minSdk 23
+        targetSdk 34
+        versionCode 6
+        versionName '5.1.0'
+    }
+
+    if (hasReleaseSigning) {
+        signingConfigs {
+            release {
+                storeFile file(keystorePath)
+                storePassword keystorePassword
+                keyAlias keyAliasValue
+                keyPassword keyPasswordValue
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            minifyEnabled false
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
