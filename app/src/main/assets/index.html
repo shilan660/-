@@ -51,6 +51,16 @@
   <button type="button" class="feature-card" onclick="showPage('speedPage')"><span class="feature-icon">书</span><span class="feature-copy"><strong>背词速度计</strong><small>本轮平均、今日平均与学习时长</small></span><span class="feature-arrow">›</span></button>
   <button type="button" class="feature-card" onclick="showPage('calcPage')"><span class="feature-icon">＋</span><span class="feature-copy"><strong>计算器与单位换算</strong><small>基础四则运算、角度数字互转及常见单位</small></span><span class="feature-arrow">›</span></button>
   <button type="button" class="feature-card" onclick="showPage('foodPage')"><span class="feature-icon">食</span><span class="feature-copy"><strong>饮食打卡</strong><small>记录吃了什么，自动统计每种食物吃了几顿</small></span><span class="feature-arrow">›</span></button>
+  <button type="button" class="feature-card" onclick="checkAppUpdate()"><span class="feature-icon">↻</span><span class="feature-copy"><strong>检查应用更新</strong><small id="appVersionLine">查看当前版本和最新版本</small></span><span class="feature-arrow">›</span></button>
+  <section id="appUpdatePanel" class="card" style="display:none">
+    <h2 style="font-size:18px;margin:0 0 12px">应用更新</h2>
+    <div id="appUpdateStatus" class="status">准备检查更新。</div>
+    <div id="appUpdateNotes" class="small-help" style="white-space:pre-wrap"></div>
+    <div class="row">
+      <button id="downloadUpdateBtn" class="primary" type="button" style="display:none">下载并安装</button>
+      <button id="closeUpdatePanel" class="secondary" type="button">收起</button>
+    </div>
+  </section>
   <div class="small-help">记录保存在本机。背词速度计原有的计速逻辑与数据请求保持不变。</div>
 </div>
 </div>
@@ -211,4 +221,116 @@
 </script>
 <script>
 (()=>{const $=id=>document.getElementById(id),tok=$('token'),ss=$('sessionSpeed'),ds=$('daySpeed'),sd=$('sessionDelta'),stme=$('sessionTime'),df=$('dayFinished'),dt=$('dayTime'),msgbox=$('status');let baseFinished=null,current=null,t0=null,poll=null,clock=null;tok.value=localStorage.getItem('mm_tok')||'';function msg(s,c=''){msgbox.textContent=s;msgbox.className='status '+c}function fmtShort(ms){let s=Math.max(0,Math.floor(ms/1000)),m=Math.floor(s/60),h=Math.floor(m/60);m=m%60;if(h>0)return h+':'+String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0');return String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}function fmtDay(ms){if(!Number.isFinite(ms)||ms<0)return '--';let totalSec=Math.floor(ms/1000),h=Math.floor(totalSec/3600),m=Math.floor((totalSec%3600)/60),s=totalSec%60;if(h>0)return h+'h '+m+'m';if(m>0)return m+'m '+s+'s';return s+'s'}function parseProgress(j){let q=[j],seen=new Set(),found=null;for(let depth=0;depth<5&&q.length;depth++){let nq=[];for(const x of q){if(!x||typeof x!=='object'||seen.has(x))continue;seen.add(x);let f=Number(x.finished),tm=Number(x.study_time);if(Number.isFinite(f)&&Number.isFinite(tm)){found=x;break}for(const k of ['data','progress','result'])if(x[k]&&typeof x[k]==='object')nq.push(x[k])}if(found)break;q=nq}if(!found)throw new Error('Cannot find finished/study_time in API response');let f=Number(found.finished),t=Number(found.total),tm=Number(found.study_time);return{finished:f,total:Number.isFinite(t)?t:null,studyTime:tm}}async function requestProgress(path){let t=tok.value.trim();let r=await fetch(path,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json','Authorization':'Bearer '+t},body:'{}',cache:'no-store'}),tx=await r.text(),j;try{j=JSON.parse(tx)}catch(e){throw new Error('HTTP '+r.status+' returned non-JSON')}if(!r.ok){let e=new Error('HTTP '+r.status);e.status=r.status;throw e}if(j&&j.success===false)throw new Error('API request unsuccessful');if(j&&Array.isArray(j.errors)&&j.errors.length)throw new Error('API returned an error');return parseProgress(j)}async function getProgress(){let t=tok.value.trim();if(!t)throw new Error('Please enter Token');localStorage.setItem('mm_tok',t);try{return await requestProgress('/open/api/v1/study/get_study_progress')}catch(e){if(e&&e.status&&![404,405].includes(e.status))throw e;return await requestProgress('/open/api/v1/memo/study/get_study_progress')}}function draw(){if(current){df.textContent=String(current.finished);dt.textContent=fmtDay(current.studyTime);let mins=current.studyTime/60000;ds.textContent=mins>0?(current.finished/mins).toFixed(2):'0.00'}if(t0&&baseFinished!=null){let ms=Date.now()-t0,d=Math.max(0,(current?current.finished:baseFinished)-baseFinished);sd.textContent=String(d);stme.textContent=fmtShort(ms);ss.textContent=ms>0?(d/(ms/60000)).toFixed(2):'0.00'}}async function update(){try{current=await getProgress();draw();msg('\u5df2\u8fde\u63a5 \u00b7 \u6b63\u5728\u81ea\u52a8\u5237\u65b0\u3002\u4eca\u65e5 '+current.finished+' \u8bcd\uff0c\u5b66\u4e60 '+fmtDay(current.studyTime)+'\u3002','ok')}catch(e){msg((e.message||String(e))+'\u3002\u8bf7\u68c0\u67e5 Token\u3001\u7f51\u7edc\u548c\u58a8\u58a8\u5b66\u4e60\u6570\u636e\u81ea\u52a8\u540c\u6b65\u3002','err')}}$('test').addEventListener('click',async()=>{try{msg('\u6b63\u5728\u6d4b\u8bd5...');current=await getProgress();draw();let mins=current.studyTime/60000,avg=mins>0?(current.finished/mins).toFixed(2):'0.00';msg('\u8fde\u63a5\u6210\u529f\u3002\u4eca\u65e5 '+current.finished+' \u8bcd / '+fmtDay(current.studyTime)+'\uff0c\u5e73\u5747 '+avg+' \u8bcd/\u5206\u949f\u3002','ok')}catch(e){msg((e.message||String(e))+'\u3002','err')}});$('start').addEventListener('click',async()=>{if(poll)clearInterval(poll);if(clock)clearInterval(clock);try{msg('\u6b63\u5728\u8bfb\u53d6\u8d77\u59cb\u8fdb\u5ea6...');current=await getProgress();baseFinished=current.finished;t0=Date.now();draw();msg('\u5df2\u5f00\u59cb\u3002\u672c\u8f6e\u8d77\u59cb '+baseFinished+' \u8bcd\uff1b\u4eca\u65e5\u901f\u5ea6\u540c\u6b65\u663e\u793a\u3002','ok');poll=setInterval(update,10000);clock=setInterval(draw,1000)}catch(e){msg((e.message||String(e))+'\u3002','err')}});$('stop').addEventListener('click',()=>{if(poll)clearInterval(poll);if(clock)clearInterval(clock);poll=clock=null;msg('\u5df2\u505c\u6b62\u81ea\u52a8\u5237\u65b0\uff0c\u5f53\u524d\u6570\u636e\u4fdd\u7559\u3002')});})();
-</script></body></html> 
+</script>
+<script>
+(function(){
+  var panel=document.getElementById('appUpdatePanel');
+  var statusBox=document.getElementById('appUpdateStatus');
+  var notesBox=document.getElementById('appUpdateNotes');
+  var versionLine=document.getElementById('appVersionLine');
+  var downloadButton=document.getElementById('downloadUpdateBtn');
+  var closeButton=document.getElementById('closeUpdatePanel');
+  var pendingDownloadUrl='';
+
+  function setStatus(message,kind){
+    statusBox.textContent=message||'';
+    statusBox.className='status'+(kind?' '+kind:'');
+  }
+  function setCurrentVersion(version){
+    versionLine.textContent=version?'当前版本 v'+version+' · 点击检查更新':'点击检查最新版本';
+  }
+  function initVersion(){
+    try{
+      if(window.AndroidUpdater&&typeof window.AndroidUpdater.getCurrentVersionName==='function'){
+        setCurrentVersion(window.AndroidUpdater.getCurrentVersionName());
+      }else{
+        versionLine.textContent='需要在已安装的 Android 应用中检查更新';
+      }
+    }catch(e){versionLine.textContent='点击检查最新版本';}
+  }
+
+  window.checkAppUpdate=function(){
+    panel.style.display='block';
+    notesBox.textContent='';
+    pendingDownloadUrl='';
+    downloadButton.style.display='none';
+    downloadButton.disabled=false;
+    downloadButton.textContent='下载并安装';
+    setStatus('正在连接 GitHub 检查最新版本…');
+    try{
+      if(!window.AndroidUpdater||typeof window.AndroidUpdater.checkForUpdates!=='function'){
+        setStatus('请在已安装的墨墨工具箱 Android 应用中使用此功能。','err');
+        return;
+      }
+      setCurrentVersion(window.AndroidUpdater.getCurrentVersionName());
+      window.AndroidUpdater.checkForUpdates();
+    }catch(e){setStatus('无法开始检查更新：'+(e.message||String(e)),'err');}
+  };
+
+  window.handleUpdateCheckResult=function(result){
+    result=result||{};
+    var current=result.currentVersion||'';
+    var latest=result.latestVersion||'';
+    if(current)setCurrentVersion(current);
+    if(result.status==='update_available'){
+      pendingDownloadUrl=result.downloadUrl||'';
+      setStatus('发现新版本 v'+latest+'！点击下方按钮即可下载并安装。','ok');
+      notesBox.textContent=(result.notes||'发布者暂未填写更新说明。').trim();
+      downloadButton.style.display=pendingDownloadUrl?'block':'none';
+      downloadButton.disabled=false;
+      downloadButton.textContent='下载并安装';
+      if(latest)versionLine.textContent='当前 v'+current+' · 最新 v'+latest;
+    }else if(result.status==='up_to_date'){
+      setStatus('已经是最新版本'+(current?'（v'+current+'）':'')+'。','ok');
+      notesBox.textContent='';
+      downloadButton.style.display='none';
+      if(current)versionLine.textContent='当前版本 v'+current+' · 已是最新版本';
+    }else{
+      setStatus(result.message||'检查更新失败，请稍后重试。','err');
+      notesBox.textContent='';
+      downloadButton.style.display='none';
+    }
+  };
+
+  window.handleUpdateDownloadState=function(result){
+    result=result||{};
+    setStatus(result.message||'',result.status==='download_failed'||result.status==='install_failed'?'err':(result.status==='installing'?'ok':''));
+    if(result.status==='downloading'){
+      downloadButton.style.display='block';
+      downloadButton.disabled=true;
+      downloadButton.textContent='正在下载…';
+    }else if(result.status==='permission_required'||result.status==='install_failed'){
+      downloadButton.style.display='block';
+      downloadButton.disabled=false;
+      downloadButton.textContent='继续安装';
+    }else if(result.status==='download_failed'){
+      downloadButton.style.display=pendingDownloadUrl?'block':'none';
+      downloadButton.disabled=false;
+      downloadButton.textContent='重新下载';
+    }else if(result.status==='installing'){
+      downloadButton.style.display='none';
+    }
+  };
+
+  downloadButton.addEventListener('click',function(){
+    try{
+      if(!window.AndroidUpdater||typeof window.AndroidUpdater.downloadAndInstall!=='function'){
+        setStatus('当前环境不支持下载和安装更新。','err');
+        return;
+      }
+      if(!pendingDownloadUrl){
+        setStatus('没有可用的下载地址，请重新检查更新。','err');
+        return;
+      }
+      window.AndroidUpdater.downloadAndInstall(pendingDownloadUrl);
+    }catch(e){
+      downloadButton.disabled=false;
+      downloadButton.textContent='重试';
+      setStatus('启动下载失败：'+(e.message||String(e)),'err');
+    }
+  });
+  closeButton.addEventListener('click',function(){panel.style.display='none';});
+  initVersion();
+})();
+</script>
+</body></html> 
